@@ -1,1 +1,305 @@
-On a winter break!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raghav Patel - Command Prompt</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: 'Consolas', 'Lucida Console', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Modern abstract gradient background */
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .window {
+            width: 90%;
+            max-width: 900px;
+            height: 80%;
+            max-height: 600px;
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .title-bar {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            user-select: none;
+        }
+
+        .dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+
+        .title {
+            color: #888;
+            font-size: 13px;
+            flex-grow: 1;
+            text-align: center;
+            margin-right: 60px; /* Offset for dots to center title */
+        }
+
+        #terminal {
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+            box-sizing: border-box;
+            color: #e0e0e0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .output-line {
+            margin-bottom: 6px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+
+        .command-line {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .prompt {
+            color: #cccccc;
+            margin-right: 10px;
+        }
+
+        #command-input {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 16px;
+            outline: none;
+            flex-grow: 1;
+            padding: 0;
+        }
+
+        .header {
+            margin-bottom: 25px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .under-development {
+            color: #ffcc00;
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .window {
+                width: 100%;
+                height: 100%;
+                max-width: none;
+                max-height: none;
+                border-radius: 0;
+                border: none;
+            }
+
+            #terminal {
+                padding: 15px;
+            }
+
+            .title-bar {
+                padding: 15px;
+            }
+
+            .header {
+                font-size: 12px;
+            }
+            
+            #command-input {
+                font-size: 16px; /* Prevents auto-zoom on iOS */
+            }
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        #terminal::-webkit-scrollbar {
+            width: 6px;
+        }
+        #terminal::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        #terminal::-webkit-scrollbar-track {
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div class="dots">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="title">Command Prompt</div>
+        </div>
+        <div id="terminal" onclick="document.getElementById('command-input').focus()">
+            <div class="header">
+                Microsoft Windows [Version 10.0.19045.4894]<br>
+                (c) Microsoft Corporation. All rights reserved.<br>
+                <span class="under-development">*** SITE UNDER DEVELOPMENT ***</span>
+            </div>
+            <div id="output"></div>
+            <div class="command-line">
+                <span class="prompt">C:\Users\Raghav&gt;</span>
+                <input type="text" id="command-input" autofocus autocomplete="off" spellcheck="false" inputmode="text">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const output = document.getElementById('output');
+        const input = document.getElementById('command-input');
+        const terminal = document.getElementById('terminal');
+
+        const aboutText = "Raghav Patel\nCybersecurity Engineer specializing in Detection Engineering, proactive Threat Hunting, Incident Response, and AI-driven automation.\nMaster's degree in Information Technology from National Forensic Sciences University (NFSU).";
+        
+        const projects = [
+            "Online Examination System",
+            "Multi App (Music Player & Windows DOS Program)",
+            "COVID-19 Tracker",
+            "Static Music Player"
+        ];
+
+        const jobs = [
+            "Threat Analyst 3",
+            "Threat Analyst 2",
+            "Cyber Risk Analyst 2",
+            "Senior Information Security Engineer",
+            "Information Security Engineer"
+        ];
+
+        const commands = {
+            'help': () => {
+                printLine("Available commands:");
+                printLine("  ABOUT    - Learn about Raghav Patel");
+                printLine("  PROJECTS - View list of projects");
+                printLine("  JOBS     - View job titles");
+                printLine("  CLS      - Clear the screen");
+                printLine("  HELP     - Display this help message");
+                printLine("  DATE     - Show current date");
+                printLine("  WHOAMI   - Display current user");
+            },
+            'about': () => {
+                printLine(aboutText);
+            },
+            'projects': () => {
+                printLine("Projects:");
+                projects.forEach(p => printLine("- " + p));
+            },
+            'jobs': () => {
+                printLine("Job Titles:");
+                jobs.forEach(j => printLine("- " + j));
+            },
+            'cls': () => {
+                output.innerHTML = '';
+            },
+            'date': () => {
+                printLine(new Date().toString());
+            },
+            'whoami': () => {
+                printLine("raghav-patel\\guest");
+            }
+        };
+
+        function printLine(text) {
+            const line = document.createElement('div');
+            line.className = 'output-line';
+            line.textContent = text;
+            output.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        let history = [];
+        let historyIndex = -1;
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const fullCommand = input.value.trim();
+                const cmd = fullCommand.toLowerCase();
+                
+                printLine("C:\\Users\\Raghav> " + fullCommand);
+                
+                if (fullCommand !== '') {
+                    history.push(fullCommand);
+                    historyIndex = history.length;
+                }
+
+                if (cmd === '') {
+                    // Do nothing
+                } else if (commands[cmd]) {
+                    commands[cmd]();
+                } else {
+                    printLine(`'${fullCommand}' is not recognized as an internal or external command, operable program or batch file.`);
+                }
+                
+                input.value = '';
+                terminal.scrollTop = terminal.scrollHeight;
+            } else if (e.key === 'ArrowUp') {
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    input.value = history[historyIndex];
+                }
+                e.preventDefault();
+            } else if (e.key === 'ArrowDown') {
+                if (historyIndex < history.length - 1) {
+                    historyIndex++;
+                    input.value = history[historyIndex];
+                } else {
+                    historyIndex = history.length;
+                    input.value = '';
+                }
+                e.preventDefault();
+            }
+        });
+
+        // Initial help message
+        printLine("Type 'HELP' to see available commands.");
+    </script>
+</body>
+</html>
