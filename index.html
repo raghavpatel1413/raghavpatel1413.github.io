@@ -1,305 +1,1019 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raghav Patel - Command Prompt</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            font-family: 'Consolas', 'Lucida Console', monospace;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* Modern abstract gradient background */
-            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raghav Patel | Cyber Security & Detection Engineer</title>
+  <meta name="description" content="Portfolio of Raghav Patel - Cyber Security Engineer specializing in Detection Engineering, Incident Response, Threat Hunting & AI Automation." />
+  <meta name="theme-color" content="#030712" />
 
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-        .window {
-            width: 90%;
-            max-width: 900px;
-            height: 80%;
-            max-height: 600px;
-            background: rgba(20, 20, 20, 0.7);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .title-bar {
-            padding: 10px 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            user-select: none;
-        }
-
-        .dots {
-            display: flex;
-            gap: 8px;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .red { background: #ff5f56; }
-        .yellow { background: #ffbd2e; }
-        .green { background: #27c93f; }
-
-        .title {
-            color: #888;
-            font-size: 13px;
-            flex-grow: 1;
-            text-align: center;
-            margin-right: 60px; /* Offset for dots to center title */
-        }
-
-        #terminal {
-            padding: 20px;
-            flex-grow: 1;
-            overflow-y: auto;
-            box-sizing: border-box;
-            color: #e0e0e0;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-        }
-
-        .output-line {
-            margin-bottom: 6px;
-            white-space: pre-wrap;
-            word-break: break-all;
-            line-height: 1.4;
-        }
-
-        .command-line {
-            display: flex;
-            align-items: center;
-            margin-top: 5px;
-        }
-
-        .prompt {
-            color: #cccccc;
-            margin-right: 10px;
-        }
-
-        #command-input {
-            background: transparent;
-            border: none;
-            color: #ffffff;
-            font-family: inherit;
-            font-size: 16px;
-            outline: none;
-            flex-grow: 1;
-            padding: 0;
-        }
-
-        .header {
-            margin-bottom: 25px;
-            font-size: 14px;
-            opacity: 0.8;
-        }
-
-        .under-development {
-            color: #ffcc00;
-            font-weight: bold;
-            display: block;
-            margin-top: 10px;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .window {
-                width: 100%;
-                height: 100%;
-                max-width: none;
-                max-height: none;
-                border-radius: 0;
-                border: none;
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            ios: {
+              bg: '#05070f',
+              glass: 'rgba(255, 255, 255, 0.05)',
+              glassHover: 'rgba(255, 255, 255, 0.09)',
+              border: 'rgba(255, 255, 255, 0.12)',
+              borderHighlight: 'rgba(56, 189, 248, 0.3)',
+              accent: '#38bdf8',
+              emerald: '#10b981',
+              violet: '#a855f7',
+              blue: '#0071e3',
             }
-
-            #terminal {
-                padding: 15px;
+          },
+          boxShadow: {
+            'ios-glow': '0 0 50px -10px rgba(56, 189, 248, 0.25)',
+            'ios-glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+            'card-glow': '0 20px 40px -15px rgba(0, 113, 227, 0.15)',
+          },
+          animation: {
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'gradient-shift': 'gradientShift 8s ease infinite alternate',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            gradientShift: {
+              '0%': { filter: 'hue-rotate(0deg)' },
+              '100%': { filter: 'hue-rotate(35deg)' },
             }
+          }
+        }
+      }
+    }
+  </script>
 
-            .title-bar {
-                padding: 15px;
-            }
+  <style>
+    /* iOS Frosted Glassmorphism Styles */
+    .ios-glass {
+      background: rgba(18, 24, 38, 0.65);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .ios-glass-pill {
+      background: rgba(22, 30, 49, 0.7);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+    }
 
-            .header {
-                font-size: 12px;
-            }
-            
-            #command-input {
-                font-size: 16px; /* Prevents auto-zoom on iOS */
-            }
-        }
+    .ios-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-        /* Hide scrollbar for Chrome, Safari and Opera */
-        #terminal::-webkit-scrollbar {
-            width: 6px;
-        }
-        #terminal::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-        }
-        #terminal::-webkit-scrollbar-track {
-            background: transparent;
-        }
-    </style>
+    .ios-card:hover {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+      border-color: rgba(56, 189, 248, 0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -15px rgba(0, 113, 227, 0.2), 0 0 20px rgba(56, 189, 248, 0.1);
+    }
+
+    .badge-glow {
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Ambient animated lighting */
+    .ambient-sphere {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #05070f;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
 </head>
-<body>
-    <div class="window">
-        <div class="title-bar">
-            <div class="dots">
-                <div class="dot red"></div>
-                <div class="dot yellow"></div>
-                <div class="dot green"></div>
-            </div>
-            <div class="title">Command Prompt</div>
-        </div>
-        <div id="terminal" onclick="document.getElementById('command-input').focus()">
-            <div class="header">
-                Microsoft Windows [Version 10.0.19045.4894]<br>
-                (c) Microsoft Corporation. All rights reserved.<br>
-                <span class="under-development">*** SITE UNDER DEVELOPMENT ***</span>
-            </div>
-            <div id="output"></div>
-            <div class="command-line">
-                <span class="prompt">C:\Users\Raghav&gt;</span>
-                <input type="text" id="command-input" autofocus autocomplete="off" spellcheck="false" inputmode="text">
-            </div>
-        </div>
-    </div>
+<body class="bg-[#05070f] text-slate-100 font-sans antialiased selection:bg-sky-500/30 selection:text-sky-200 min-h-screen overflow-x-hidden relative">
 
-    <script>
-        const output = document.getElementById('output');
-        const input = document.getElementById('command-input');
-        const terminal = document.getElementById('terminal');
+  <!-- Ambient Animated Gradient Background (iOS Mesh Gradients) -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+    <div class="ambient-sphere w-[550px] h-[550px] -top-32 -left-20 bg-blue-600/20 animate-pulse-slow"></div>
+    <div class="ambient-sphere w-[600px] h-[600px] top-1/3 -right-32 bg-cyan-500/15 animate-float"></div>
+    <div class="ambient-sphere w-[500px] h-[500px] bottom-10 left-1/4 bg-violet-600/15 animate-pulse-slow"></div>
+    <div class="ambient-sphere w-[400px] h-[400px] bottom-1/2 left-1/2 bg-emerald-500/10"></div>
+    <!-- Grid overlay subtle pattern -->
+    <div class="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:24px_24px] opacity-70"></div>
+  </div>
 
-        const aboutText = "Raghav Patel\nCybersecurity Engineer specializing in Detection Engineering, proactive Threat Hunting, Incident Response, and AI-driven automation";
+  <!-- iOS Floating Island Navigation -->
+  <header class="fixed top-5 inset-x-0 z-50 flex justify-center px-4">
+    <nav class="ios-glass-pill rounded-full px-5 py-2.5 flex items-center gap-4 sm:gap-6 text-sm text-slate-300">
+      <a href="#hero" class="flex items-center gap-2 font-semibold text-white tracking-tight hover:text-sky-400 transition-colors">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 badge-glow animate-pulse"></span>
+        <span class="bg-gradient-to-r from-white via-sky-100 to-sky-400 bg-clip-text text-transparent">Raghav.dev</span>
+      </a>
+      <div class="h-4 w-px bg-white/20"></div>
+      <div class="hidden sm:flex items-center gap-5 text-xs font-medium uppercase tracking-wider text-slate-400">
+        <a href="#about" class="hover:text-white transition-colors">Overview</a>
+        <a href="#skills" class="hover:text-white transition-colors">Skills</a>
+        <a href="#experience" class="hover:text-white transition-colors">Experience</a>
+        <a href="#awards" class="hover:text-white transition-colors">Honors</a>
+        <a href="#education" class="hover:text-white transition-colors">Education</a>
+      </div>
+      <button onclick="openTerminalModal()" 
+         class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-sky-500/10 hover:bg-sky-500/20 text-sky-400 hover:text-sky-300 border border-sky-400/30 text-xs font-medium transition-all shadow-sm">
+        <i data-lucide="terminal" class="w-3.5 h-3.5"></i>
+        <span>Connect [SSH]</span>
+      </button>
+    </nav>
+  </header>
+
+  <main class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 space-y-28">
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="pt-6 sm:pt-12 text-center flex flex-col items-center">
+      
+      <!-- Top dynamic badge pill -->
+      <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full ios-glass border border-emerald-500/30 text-emerald-300 text-xs font-medium mb-6 shadow-ios-glow">
+        <span class="flex h-2 w-2 relative">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span>Threat Analyst 3 @ Sophos &bull; Incident Response & Detection Engineering</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight max-w-4xl leading-[1.1] text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-100 to-slate-400">
+        Engineering Elite Cyber Defenses & AI-Driven Threat Automation
+      </h1>
+
+      <p class="mt-6 text-base sm:text-xl text-slate-300/90 max-w-3xl leading-relaxed font-normal">
+        Hi, I'm <span class="text-white font-semibold">Raghav Patel</span>. A Cybersecurity Engineer with <span class="text-sky-400 font-medium">5+ years of battle-tested experience</span> in proactive Threat Hunting, Incident Containment, Detection Engineering, and scaling AI security workflows across <span class="text-sky-400 font-medium">40,000+ customer environments</span>.
+      </p>
+
+      <!-- Location & Languages Chips -->
+      <div class="mt-5 flex flex-wrap justify-center items-center gap-3 text-xs text-slate-400">
+        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full ios-glass">
+          <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sky-400"></i>
+          <span>Ahmedabad, Gujarat, India</span>
+        </div>
+        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full ios-glass">
+          <i data-lucide="languages" class="w-3.5 h-3.5 text-violet-400"></i>
+          <span>English (Proficient) &bull; Hindi &bull; Gujarati</span>
+        </div>
+        <div class="flex items-center gap-1.5 px-3 py-1 rounded-full ios-glass border-amber-500/30 text-amber-300">
+          <i data-lucide="trophy" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span>1st Place - Pacific Thunder CTF 2025</span>
+        </div>
+      </div>
+
+      <!-- CTA Buttons -->
+      <div class="mt-8 flex flex-wrap justify-center gap-4">
+        <button onclick="openTerminalModal()" 
+           class="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-semibold text-sm transition-all duration-200 shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 hover:scale-[1.02]">
+          <i data-lucide="terminal" class="w-4 h-4 text-sky-200"></i>
+          <span>Initialize Secure Connection</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </button>
+        <a href="#experience" 
+           class="inline-flex items-center gap-2 px-6 py-3 rounded-xl ios-glass hover:bg-white/10 text-slate-200 font-medium text-sm transition-all duration-200 border border-white/15 hover:border-white/30">
+          <i data-lucide="briefcase" class="w-4 h-4 text-slate-400"></i>
+          <span>Explore Experience</span>
+        </a>
+      </div>
+
+      <!-- Quick Metrics Bar (iOS Glass Widgets) -->
+      <div class="w-full grid grid-cols-2 sm:grid-cols-4 gap-4 mt-14">
+        <div class="ios-card rounded-2xl p-5 text-center">
+          <div class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-sky-400 to-blue-500 bg-clip-text text-transparent">40,000+</div>
+          <div class="text-xs uppercase font-medium text-slate-400 mt-1 tracking-wider">Customer Tenants Guarded</div>
+        </div>
+        <div class="ios-card rounded-2xl p-5 text-center">
+          <div class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">24h &rarr; 30m</div>
+          <div class="text-xs uppercase font-medium text-slate-400 mt-1 tracking-wider">Workflow Time Reduced</div>
+        </div>
+        <div class="ios-card rounded-2xl p-5 text-center">
+          <div class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text text-transparent">100+</div>
+          <div class="text-xs uppercase font-medium text-slate-400 mt-1 tracking-wider">MDR Analysts Empowered</div>
+        </div>
+        <div class="ios-card rounded-2xl p-5 text-center">
+          <div class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">#1 Champion</div>
+          <div class="text-xs uppercase font-medium text-slate-400 mt-1 tracking-wider">Sophos Pacific Thunder CTF</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- EXECUTIVE SUMMARY & PHILOSOPHY -->
+    <section id="about" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <div class="p-2 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400">
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Engineering Summary</h2>
+      </div>
+
+      <div class="ios-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+          Cybersecurity Engineer with <strong class="text-white">5 years of hands-on leadership</strong> specializing in <span class="text-sky-300 font-medium">Detection Engineering</span>, <span class="text-sky-300 font-medium">Proactive Threat Hunting</span>, <span class="text-sky-300 font-medium">High-Severity Incident Response</span>, and <span class="text-sky-300 font-medium">AI-driven Security Automation</span> at Sophos. 
+        </p>
+        <div class="mt-4 grid sm:grid-cols-2 gap-4 text-sm text-slate-300 pt-4 border-t border-white/10">
+          <div class="flex items-start gap-3">
+            <i data-lucide="cpu" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5"></i>
+            <div>
+              <span class="font-semibold text-white">Detection & Intelligence at Scale:</span>
+              <p class="text-slate-400 mt-0.5">Operationalized threat intelligence across 40,000+ customer environments, systematically reducing false positives and engineering rules directly from post-incident root-cause analysis.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <i data-lucide="zap" class="w-5 h-5 text-sky-400 shrink-0 mt-0.5"></i>
+            <div>
+              <span class="font-semibold text-white">Automation & Pipeline Architecture:</span>
+              <p class="text-slate-400 mt-0.5">Architected security automation workflows and integrated AI to optimize investigation cycles, slashing manual tasks from full-day efforts (24h+) down to under 30 minutes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORE SKILLS & CAPABILITIES -->
+    <section id="skills" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <div class="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+          <i data-lucide="terminal" class="w-5 h-5"></i>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Technical Arsenal & Core Competencies</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
-        const projects = [
-            "Online Examination System",
-            "Multi App (Music Player & Windows DOS Program)",
-            "COVID-19 Tracker",
-            "Static Music Player"
-        ];
+        <!-- Skill Card 1 -->
+        <div class="ios-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-4">
+              <i data-lucide="radar" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Detection Engineering & CTH</h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+              Cyber Threat Hunting (CTH) based on IOCs, behavioral telemetry, MITRE ATT&CK mapping, and logic tuning on massive live datasets.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2 pt-2 border-t border-white/5">
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-sky-300 border border-white/10 font-mono">MITRE ATT&CK</span>
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-sky-300 border border-white/10 font-mono">Detection Tuning</span>
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-sky-300 border border-white/10 font-mono">Telemetry Correlation</span>
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-sky-300 border border-white/10 font-mono">False-Positive Audit</span>
+          </div>
+        </div>
 
-        const jobs = [
-            "Threat Analyst 3",
-            "Threat Analyst 2",
-            "Cyber Risk Analyst 2",
-            "Senior Information Security Engineer",
-            "Information Security Engineer"
-        ];
+        <!-- Skill Card 2 -->
+        <div class="ios-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400 mb-4">
+              <i data-lucide="bot" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">AI Security & Automation</h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+              Designing AI-assisted investigation workflows, automating SOC playbooks, building Python CLI/GUI tools deployed to 100+ analysts.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2 pt-2 border-t border-white/5">
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-violet-300 border border-white/10 font-mono">AI-Assisted Triage</span>
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-violet-300 border border-white/10 font-mono">Python Tooling</span>
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-violet-300 border border-white/10 font-mono">Workflow Automation</span>
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-violet-300 border border-white/10 font-mono">Data Pipelines</span>
+          </div>
+        </div>
 
-        const commands = {
-            'help': () => {
-                printLine("Available commands:");
-                printLine("  ABOUT    - Learn about Raghav Patel");
-                printLine("  PROJECTS - View list of projects");
-                printLine("  JOBS     - View job titles");
-                printLine("  CLS      - Clear the screen");
-                printLine("  HELP     - Display this help message");
-                printLine("  DATE     - Show current date");
-                printLine("  WHOAMI   - Display current user");
-            },
-            'about': () => {
-                printLine(aboutText);
-            },
-            'projects': () => {
-                printLine("Projects:");
-                projects.forEach(p => printLine("- " + p));
-            },
-            'jobs': () => {
-                printLine("Job Titles:");
-                jobs.forEach(j => printLine("- " + j));
-            },
-            'cls': () => {
-                output.innerHTML = '';
-            },
-            'date': () => {
-                printLine(new Date().toString());
-            },
-            'whoami': () => {
-                printLine("raghav-patel\\guest");
-            }
-        };
+        <!-- Skill Card 3 -->
+        <div class="ios-card rounded-2xl p-6 flex flex-col justify-between">
+          <div>
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4">
+              <i data-lucide="cloud-lightning" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Cloud Security & Attack Surface</h3>
+            <p class="text-slate-400 text-sm leading-relaxed mb-4">
+              Sophos Managed Risk launch engineer, Tenable integration, CVSS v3 vulnerability scoring, attack surface reduction, and cloud security posture.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2 pt-2 border-t border-white/5">
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-emerald-300 border border-white/10 font-mono">Cloud Security</span>
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-emerald-300 border border-white/10 font-mono">Attack Surface Mgmt</span>
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-emerald-300 border border-white/10 font-mono">Tenable VM</span>
+            <span class="px-2.5 py-1 text-xs rounded-lg bg-white/5 text-emerald-300 border border-white/10 font-mono">Security Data Lake</span>
+          </div>
+        </div>
 
-        function printLine(text) {
-            const line = document.createElement('div');
-            line.className = 'output-line';
-            line.textContent = text;
-            output.appendChild(line);
-            terminal.scrollTop = terminal.scrollHeight;
+      </div>
+    </section>
+
+    <!-- EXPERIENCE TIMELINE -->
+    <section id="experience" class="space-y-8">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400">
+            <i data-lucide="layers" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Experience Journey</h2>
+            <p class="text-slate-400 text-sm mt-0.5">5 continuous years advancing security engineering at Sophos</p>
+          </div>
+        </div>
+        <div class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full ios-glass border-blue-500/30 text-blue-300 text-xs font-semibold">
+          <span>Sophos &bull; 5 Years</span>
+        </div>
+      </div>
+
+      <div class="relative pl-6 sm:pl-8 border-l border-white/10 space-y-10">
+
+        <!-- Role 1: Threat Analyst 3 -->
+        <div class="relative group">
+          <div class="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-sky-500 border-4 border-[#05070f] group-hover:scale-125 transition-transform duration-200"></div>
+          
+          <div class="ios-card rounded-2xl p-6 sm:p-7 space-y-4">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-300 border border-sky-500/20 text-xs font-semibold mb-2">
+                  <span>Current Promotion</span>
+                </div>
+                <h3 class="text-xl font-bold text-white">Threat Analyst 3</h3>
+                <div class="text-sm font-medium text-sky-400">Sophos &bull; Ahmedabad</div>
+              </div>
+              <div class="px-3 py-1 rounded-full ios-glass text-xs font-mono text-slate-300">
+                July 2026 &mdash; Present
+              </div>
+            </div>
+
+            <ul class="space-y-2.5 text-sm text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">Lead Incident Responder</strong> on escalated and high-severity engagements &mdash; orchestrating containment decisions, deep forensic analysis, root-cause investigation, and executive debriefs.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">Post-Incident Detection Engineering:</strong> Systematically identify missed attacker behaviors from incidents, author and tune resilient detection logic, and validate across live telemetry.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">Data-Driven False Positive Reduction:</strong> Audit noisy rules through rigorous telemetry analysis, ensuring analyst focus is prioritized strictly on high-risk threats.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">AI-Assisted Automation Workflows:</strong> Design and deploy AI-accelerated workflows that radically shorten investigation cycles while maintaining uncompromising analytical rigor.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Role 2: Threat Analyst 2 -->
+        <div class="relative group">
+          <div class="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-slate-600 border-4 border-[#05070f] group-hover:scale-125 transition-transform duration-200"></div>
+          
+          <div class="ios-card rounded-2xl p-6 sm:p-7 space-y-4">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <h3 class="text-xl font-bold text-white">Threat Analyst 2 &bull; Sophos MDR</h3>
+                <div class="text-sm font-medium text-slate-400">Sophos &bull; India</div>
+              </div>
+              <div class="px-3 py-1 rounded-full ios-glass text-xs font-mono text-slate-400">
+                March 2025 &mdash; July 2026 (1 yr 5 mos)
+              </div>
+            </div>
+
+            <ul class="space-y-2.5 text-sm text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">Proactive Threat Hunting at Scale:</strong> Conducted threat-intelligence and IOC-driven hunts across <strong class="text-sky-300">40,000+ customer environments</strong> within Sophos MDR.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">Central Tool Development:</strong> Developed and integrated internal tooling onto Sophos Central that empowered <strong class="text-sky-300">100+ MDR analysts</strong> to drastically reduce investigation overhead.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">Playbook & Query Optimization:</strong> Enhanced log correlation queries and playbooks to accelerate cross-source incident triage.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span>Led multiple end-to-end security incidents from immediate containment to root cause analysis and mitigation.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Role 3: Cyber Risk Analyst 2 -->
+        <div class="relative group">
+          <div class="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-slate-600 border-4 border-[#05070f] group-hover:scale-125 transition-transform duration-200"></div>
+          
+          <div class="ios-card rounded-2xl p-6 sm:p-7 space-y-4">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <h3 class="text-xl font-bold text-white">Cyber Risk Analyst 2 &bull; Sophos Managed Risk</h3>
+                <div class="text-sm font-medium text-slate-400">Sophos &bull; India</div>
+              </div>
+              <div class="px-3 py-1 rounded-full ios-glass text-xs font-mono text-slate-400">
+                February 2024 &mdash; February 2025 (1 yr 1 mo)
+              </div>
+            </div>
+
+            <ul class="space-y-2.5 text-sm text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">Pilot Launch Engineer:</strong> Key engineer launching <strong class="text-sky-300">Sophos Managed Risk</strong> in partnership with Tenable, taking the service from early access to a multi-million-dollar live offering.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">Pipeline Automation (24h &rarr; 30m):</strong> Automated vulnerability and attack-surface report processing, cutting manual analysis time from over 24 hours to under 30 minutes.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">MITRE ATT&CK Mapping & Lab Architecture:</strong> Mapped vulnerability classes directly to MITRE ATT&CK phases and built reproducible local training labs for analysts.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span>Re-engineered the HTML vulnerability reporting engine from CVSS v2 to CVSS v3 scoring and hydrated security data lakes for downstream detection use cases.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Role 4: Senior Information Security Engineer -->
+        <div class="relative group">
+          <div class="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-slate-600 border-4 border-[#05070f] group-hover:scale-125 transition-transform duration-200"></div>
+          
+          <div class="ios-card rounded-2xl p-6 sm:p-7 space-y-4">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <h3 class="text-xl font-bold text-white">Senior Information Security Engineer</h3>
+                <div class="text-sm font-medium text-slate-400">Sophos &bull; Bengaluru</div>
+              </div>
+              <div class="px-3 py-1 rounded-full ios-glass text-xs font-mono text-slate-400">
+                June 2023 &mdash; January 2024 (8 mos)
+              </div>
+            </div>
+
+            <ul class="space-y-2.5 text-sm text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">SOC Shift Lead:</strong> Led a team of four in 24/7 MDR operations, running threat-intelligence hunts across thousands of customer tenants.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span>Built automated workflows improving SOC throughput, response accuracy, and strict SLA compliance; spearheaded multiple code review projects.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Role 5: Information Security Engineer -->
+        <div class="relative group">
+          <div class="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-slate-600 border-4 border-[#05070f] group-hover:scale-125 transition-transform duration-200"></div>
+          
+          <div class="ios-card rounded-2xl p-6 sm:p-7 space-y-4">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <h3 class="text-xl font-bold text-white">Information Security Engineer</h3>
+                <div class="text-sm font-medium text-slate-400">Sophos &bull; Bengaluru</div>
+              </div>
+              <div class="px-3 py-1 rounded-full ios-glass text-xs font-mono text-slate-400">
+                October 2021 &mdash; June 2023 (1 yr 9 mos)
+              </div>
+            </div>
+
+            <ul class="space-y-2.5 text-sm text-slate-300">
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span><strong class="text-white">Rapid Automation (30m &rarr; 2m):</strong> Automated manual posture-improvement workflows in Python within months of joining, and co-built the GUI Asset Discovery tool.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-sky-400 shrink-0 mt-0.5"></i>
+                <span>Authored standard health-check playbooks, trained incoming threat analysts and interns, and contributed architectural inputs for the Account Health Check automated feature.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HONORS & CERTIFICATIONS -->
+    <section id="awards" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <div class="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400">
+          <i data-lucide="award" class="w-5 h-5"></i>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Honors & Certifications</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Honors Award Card -->
+        <div class="ios-card rounded-3xl p-6 sm:p-8 border-amber-500/30 relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute -right-8 -top-8 w-40 h-40 bg-amber-500/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div>
+            <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-3">
+              <i data-lucide="trophy" class="w-4 h-4"></i>
+              <span>Champion Distinction</span>
+            </div>
+            <h3 class="text-2xl font-extrabold text-white">First Place Winner</h3>
+            <p class="text-amber-200/90 font-medium text-base mt-1">Sophos Internal Pacific Thunder CTF 2025</p>
+            <p class="text-slate-400 text-sm mt-3 leading-relaxed">
+              Awarded 1st place in the rigorous Sophos-wide competitive cyber tournament solving advanced incident response, exploit analysis, malware forensics, and attack simulation challenges.
+            </p>
+          </div>
+          <div class="mt-6 inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold w-fit">
+            <span>CTF Champion &bull; 2025</span>
+          </div>
+        </div>
+
+        <!-- Certifications List Card -->
+        <div class="ios-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 text-sky-400 text-xs font-bold uppercase tracking-wider mb-4">
+              <i data-lucide="badge-check" class="w-4 h-4"></i>
+              <span>Verified Industry Credentials</span>
+            </div>
+
+            <div class="space-y-4">
+              <!-- Cert 1 -->
+              <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-sky-400/30 transition-colors">
+                <div class="p-2 rounded-xl bg-sky-500/20 text-sky-400 shrink-0">
+                  <i data-lucide="shield" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-white">Tenable Vulnerability Management Specialist</h4>
+                  <p class="text-xs text-slate-400 mt-0.5">Tenable &bull; Enterprise Vulnerability & Risk Management</p>
+                </div>
+              </div>
+
+              <!-- Cert 2 -->
+              <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-sky-400/30 transition-colors">
+                <div class="p-2 rounded-xl bg-purple-500/20 text-purple-400 shrink-0">
+                  <i data-lucide="git-branch" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-white">GitHub Foundations</h4>
+                  <p class="text-xs text-slate-400 mt-0.5">GitHub &bull; DevSecOps & Repository Architecture</p>
+                </div>
+              </div>
+
+              <!-- Cert 3 -->
+              <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-sky-400/30 transition-colors">
+                <div class="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 shrink-0">
+                  <i data-lucide="check-circle" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-white">CompTIA CySA+</h4>
+                  <p class="text-xs text-slate-400 mt-0.5">CompTIA Cybersecurity Analyst</p>
+                </div>
+              </div>
+
+              <!-- Cert 4 -->
+              <div class="flex items-start gap-3.5 p-3 rounded-2xl bg-white/5 border border-white/5 hover:border-sky-400/30 transition-colors">
+                <div class="p-2 rounded-xl bg-blue-500/20 text-blue-400 shrink-0">
+                  <i data-lucide="lock" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-white">(ISC)&sup2; Certified in Cybersecurity (CC)</h4>
+                  <p class="text-xs text-slate-400 mt-0.5">ISC2 &bull; Information Security Principles</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ACADEMIC FOUNDATION -->
+    <section id="education" class="space-y-6">
+      <div class="flex items-center gap-3">
+        <div class="p-2 rounded-xl bg-violet-500/10 border border-violet-500/20 text-violet-400">
+          <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">Academic Foundation</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+
+        <!-- NFSU -->
+        <div class="ios-card rounded-2xl p-6 sm:p-7 relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-violet-500/10 rounded-full blur-2xl pointer-events-none"></div>
+          <div>
+            <div class="text-xs font-mono text-violet-400 font-semibold mb-2">2019 &mdash; 2021</div>
+            <h3 class="text-xl font-bold text-white">Master's in Information Technology</h3>
+            <p class="text-sm font-medium text-slate-300 mt-1">National Forensic Sciences University (NFSU)</p>
+            <p class="text-xs text-slate-400 mt-3 leading-relaxed">
+              Specialized graduate study focusing on digital forensics, cyber intelligence, network defense, telemetry correlation, and system security fundamentals.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-white/10 text-xs text-slate-400 flex items-center justify-between">
+            <span>India's Premier Forensic Institution</span>
+            <span class="text-violet-400 font-mono">M.Sc</span>
+          </div>
+        </div>
+
+        <!-- UTU B.Sc -->
+        <div class="ios-card rounded-2xl p-6 sm:p-7 flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-mono text-slate-400 font-semibold mb-2">2015 &mdash; 2018</div>
+            <h3 class="text-xl font-bold text-white">Bachelor of Science &bull; IT</h3>
+            <p class="text-sm font-medium text-slate-300 mt-1">Uka Tarsadia University (UTU)</p>
+            <p class="text-xs text-slate-400 mt-3 leading-relaxed">
+              Core computer science foundations, database systems, computer networking, operating systems, security models, and programming.
+            </p>
+          </div>
+          <div class="mt-5 pt-3 border-t border-white/10 text-xs text-slate-400 flex items-center justify-between">
+            <span>Undergraduate Degree</span>
+            <span class="text-sky-400 font-mono">B.Sc IT</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- CONNECT FOOTER (Zero PII - Secure Interactive Terminal) -->
+    <section class="text-center pt-8">
+      <div class="ios-glass rounded-3xl p-8 sm:p-12 relative overflow-hidden max-w-3xl mx-auto border border-white/15 shadow-2xl">
+        <div class="absolute inset-0 bg-gradient-to-b from-sky-500/10 via-transparent to-transparent pointer-events-none"></div>
+        
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white shadow-lg mb-6 shadow-sky-500/30">
+          <i data-lucide="terminal" class="w-7 h-7"></i>
+        </div>
+
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Let's Connect</h2>
+        <p class="mt-3 text-slate-300 text-sm sm:text-base max-w-lg mx-auto">
+          Passionate about cutting-edge detection engineering, incident response, AI tooling, and high-impact security architecture.
+        </p>
+
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <button onclick="openTerminalModal()"
+             class="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-semibold text-sm transition-all shadow-xl shadow-sky-500/25 hover:shadow-sky-500/40 hover:scale-[1.03] cursor-pointer">
+            <i data-lucide="terminal" class="w-5 h-5"></i>
+            <span>Open Secure Terminal & Connect</span>
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-300"></i>
+          </button>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+          <span>&copy; Raghav Patel &bull; Cybersecurity & Detection Engineering</span>
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-sky-400"></i> Ahmedabad, Gujarat, India
+          </span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- INTERACTIVE TERMINAL MODAL -->
+  <div id="terminal-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 opacity-0 pointer-events-none transition-all duration-300">
+    <div id="terminal-box" class="relative w-full max-w-2xl bg-[#080d1a]/95 border border-sky-500/30 rounded-2xl shadow-2xl shadow-sky-500/20 overflow-hidden transform scale-95 transition-all duration-300 flex flex-col">
+      
+      <!-- Terminal macOS/iOS Header -->
+      <div class="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/10 select-none">
+        <div class="flex items-center gap-2">
+          <button onclick="closeTerminalModal()" title="Close Terminal" class="w-3 h-3 rounded-full bg-rose-500 hover:bg-rose-600 transition-colors cursor-pointer"></button>
+          <span class="w-3 h-3 rounded-full bg-amber-500/80"></span>
+          <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-mono text-slate-300 font-medium">
+          <i data-lucide="lock" class="w-3.5 h-3.5 text-sky-400"></i>
+          <span>raghav@security-ops:~ (ssh-tunnel)</span>
+        </div>
+        <div class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider font-semibold">
+          ZERO-TRUST
+        </div>
+      </div>
+
+      <!-- Terminal Body / Log View -->
+      <div id="terminal-content" class="p-4 sm:p-6 font-mono text-xs sm:text-sm text-slate-300 space-y-4 max-h-[75vh] overflow-y-auto">
+        
+        <!-- Welcome banner -->
+        <div class="space-y-1 text-slate-400 text-xs">
+          <p class="text-sky-400 font-bold">[+] RAGHAV PATEL SECURE RECON GATEWAY v2.6.4</p>
+          <p>[+] TARGET HOST: raghav@security-ops.local (Port 2222)</p>
+          <p>[!] ZERO-TRUST POLICY ACTIVE: Automated verification required before SSH key exchange.</p>
+          <div class="border-b border-slate-700/60 my-2"></div>
+        </div>
+
+        <!-- STEP 1: MATH CHALLENGE -->
+        <div id="term-challenge-stage" class="space-y-3">
+          <div class="flex items-start gap-2 text-amber-300">
+            <span class="text-amber-400">[CHALLENGE]</span>
+            <span>Prove human operator identity: What is <strong id="term-math-q" class="text-white text-sm">2 + 5</strong>?</span>
+          </div>
+
+          <form id="term-math-form" onsubmit="handleMathSubmit(event)" class="flex items-center gap-2 pt-1">
+            <span class="text-emerald-400 font-bold select-none">operator@gateway:~$</span>
+            <input type="number" id="term-math-input" autocomplete="off" required placeholder="?" 
+                   class="w-24 bg-white/5 border border-sky-500/40 focus:border-sky-400 rounded-lg px-2.5 py-1 text-white font-mono focus:outline-none focus:ring-1 focus:ring-sky-400 text-sm" />
+            <button type="submit" class="px-3.5 py-1 bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-400/40 rounded-lg text-xs font-semibold transition-colors cursor-pointer">
+              Verify
+            </button>
+          </form>
+          <div id="term-math-error" class="hidden text-rose-400 text-xs flex items-center gap-1.5 pt-1">
+            <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i>
+            <span>[ERROR] Verification failed. Invalid response. Try again.</span>
+          </div>
+        </div>
+
+        <!-- STEP 2: SSH HANDSHAKE & DETAILS FORM (Hidden initially) -->
+        <div id="term-ssh-stage" class="hidden space-y-4">
+          <!-- SSH Boot Log -->
+          <div class="space-y-1 text-xs">
+            <p class="text-emerald-400 font-semibold">[✓] Human operator verified. Checksum valid.</p>
+            <p class="text-sky-300">[SSH] Initiating cryptographic handshake (Curve25519-SHA256)...</p>
+            <p class="text-slate-400">[SSH] Cipher: ChaCha20-Poly1305 | Session ID: <span id="term-session-id" class="text-sky-400">#SEC-4092</span></p>
+            <p class="text-emerald-400 font-semibold">[✓] SSH CONNECTION SUCCESSFUL. Welcome to Raghav's Secure Channel.</p>
+            <div class="border-b border-slate-700/60 my-2"></div>
+            <p class="text-slate-300">Please provide your coordinates and secure dispatch payload:</p>
+          </div>
+
+          <!-- Contact Details Form inside Terminal -->
+          <form id="term-contact-form" onsubmit="handleMessageSubmit(event)" class="space-y-3 pt-2">
+            <div>
+              <label class="block text-xs text-sky-400 mb-1">[>] Your Name / Call-sign <span class="text-rose-400">*</span></label>
+              <input type="text" id="term-name" required placeholder="e.g. John Doe / CyberSec Lead" 
+                     class="w-full bg-white/5 border border-white/10 focus:border-sky-400 rounded-lg px-3 py-1.5 text-white font-mono text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-sky-400 transition-colors" />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs text-sky-400 mb-1">[>] Email Address (for return signal) <span class="text-rose-400">*</span></label>
+                <input type="email" id="term-email" required placeholder="john@example.com" 
+                       class="w-full bg-white/5 border border-white/10 focus:border-sky-400 rounded-lg px-3 py-1.5 text-white font-mono text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-sky-400 transition-colors" />
+              </div>
+              <div>
+                <label class="block text-xs text-sky-400 mb-1">[>] Phone Number (optional direct line)</label>
+                <input type="tel" id="term-phone" placeholder="+1 (555) 000-0000" 
+                       class="w-full bg-white/5 border border-white/10 focus:border-sky-400 rounded-lg px-3 py-1.5 text-white font-mono text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-sky-400 transition-colors" />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs text-sky-400 mb-1">[>] Message / Transmission Payload <span class="text-rose-400">*</span></label>
+              <textarea id="term-message" required rows="3" placeholder="Enter your transmission payload or project inquiry..." 
+                        class="w-full bg-white/5 border border-white/10 focus:border-sky-400 rounded-lg px-3 py-1.5 text-white font-mono text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-sky-400 transition-colors"></textarea>
+            </div>
+
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-[11px] text-slate-500">Payload encrypted via AES-256</span>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="closeTerminalModal()" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 text-xs font-mono transition-colors cursor-pointer">
+                  Abort
+                </button>
+                <button type="submit" id="term-submit-btn" 
+                        class="px-4 py-1.5 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white text-xs font-mono font-semibold transition-all shadow-md shadow-emerald-500/20 cursor-pointer flex items-center gap-1.5">
+                  <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                  <span>Transmit Payload</span>
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Sending State -->
+          <div id="term-sending-state" class="hidden space-y-2 py-2">
+            <div class="flex items-center gap-2 text-sky-400 text-xs">
+              <span class="animate-spin inline-block w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full"></span>
+              <span>[TRANSMIT] Encrypting buffer payload (AES-256-GCM)...</span>
+            </div>
+            <p class="text-slate-400 text-xs">[DISPATCH] Relaying packet to Raghav's inbox via secure API gateway...</p>
+          </div>
+
+          <!-- Success State -->
+          <div id="term-success-state" class="hidden space-y-3 py-3 border-t border-emerald-500/30">
+            <div class="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 space-y-1 text-xs">
+              <div class="flex items-center gap-2 font-bold text-sm text-emerald-400">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                <span>[200 OK] Transmission Successful!</span>
+              </div>
+              <p>Your encrypted dispatch has been delivered directly to Raghav's inbox.</p>
+              <p class="text-slate-400 text-[11px]">Raghav will review your transmission and reply to the email provided.</p>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+              <button onclick="resetTerminal()" class="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-mono cursor-pointer">
+                Send Another
+              </button>
+              <button onclick="closeTerminalModal()" class="px-4 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-400/40 text-xs font-mono font-semibold cursor-pointer">
+                Close Session
+              </button>
+            </div>
+          </div>
+
+          <!-- Error State -->
+          <div id="term-error-state" class="hidden p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs space-y-1">
+            <div class="flex items-center gap-2 font-bold text-rose-400">
+              <i data-lucide="alert-circle" class="w-4 h-4"></i>
+              <span>[TRANSMISSION ERROR] Failed to dispatch payload.</span>
+            </div>
+            <p id="term-error-msg" class="text-[11px] text-slate-400">Please check your internet connection or try again.</p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Terminal State Variables
+    let mathNum1 = 0;
+    let mathNum2 = 0;
+    let mathAnswer = 0;
+
+    function generateMathChallenge() {
+      mathNum1 = Math.floor(Math.random() * 8) + 2;
+      mathNum2 = Math.floor(Math.random() * 8) + 1;
+      mathAnswer = mathNum1 + mathNum2;
+      const qEl = document.getElementById('term-math-q');
+      if (qEl) {
+        qEl.innerText = `${mathNum1} + ${mathNum2} = ?`;
+      }
+      const inputEl = document.getElementById('term-math-input');
+      if (inputEl) {
+        inputEl.value = '';
+      }
+      const errEl = document.getElementById('term-math-error');
+      if (errEl) {
+        errEl.classList.add('hidden');
+      }
+    }
+
+    function openTerminalModal() {
+      const modal = document.getElementById('terminal-modal');
+      const box = document.getElementById('terminal-box');
+      if (!modal || !box) return;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      box.classList.remove('scale-95');
+      box.classList.add('scale-100');
+
+      resetTerminal();
+      generateMathChallenge();
+      setTimeout(() => {
+        document.getElementById('term-math-input')?.focus();
+      }, 100);
+    }
+
+    function closeTerminalModal() {
+      const modal = document.getElementById('terminal-modal');
+      const box = document.getElementById('terminal-box');
+      if (!modal || !box) return;
+
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      box.classList.add('scale-95');
+      box.classList.remove('scale-100');
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeTerminalModal();
+      }
+    });
+
+    // Close on backdrop click
+    document.getElementById('terminal-modal')?.addEventListener('click', (e) => {
+      if (e.target.id === 'terminal-modal') {
+        closeTerminalModal();
+      }
+    });
+
+    function handleMathSubmit(e) {
+      e.preventDefault();
+      const val = parseInt(document.getElementById('term-math-input')?.value, 10);
+      const errEl = document.getElementById('term-math-error');
+
+      if (val === mathAnswer) {
+        errEl?.classList.add('hidden');
+        document.getElementById('term-challenge-stage')?.classList.add('hidden');
+        const sshStage = document.getElementById('term-ssh-stage');
+        if (sshStage) {
+          sshStage.classList.remove('hidden');
         }
+        // Random session ID
+        const sessionEl = document.getElementById('term-session-id');
+        if (sessionEl) {
+          sessionEl.innerText = `#SEC-${Math.floor(1000 + Math.random() * 9000)}`;
+        }
+        lucide.createIcons();
+        setTimeout(() => {
+          document.getElementById('term-name')?.focus();
+        }, 100);
+      } else {
+        errEl?.classList.remove('hidden');
+        generateMathChallenge();
+        lucide.createIcons();
+      }
+    }
 
-        let history = [];
-        let historyIndex = -1;
+    function resetTerminal() {
+      document.getElementById('term-challenge-stage')?.classList.remove('hidden');
+      document.getElementById('term-ssh-stage')?.classList.add('hidden');
+      document.getElementById('term-contact-form')?.classList.remove('hidden');
+      document.getElementById('term-sending-state')?.classList.add('hidden');
+      document.getElementById('term-success-state')?.classList.add('hidden');
+      document.getElementById('term-error-state')?.classList.add('hidden');
+      
+      const form = document.getElementById('term-contact-form');
+      if (form) form.reset();
+      generateMathChallenge();
+      lucide.createIcons();
+    }
 
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const fullCommand = input.value.trim();
-                const cmd = fullCommand.toLowerCase();
-                
-                printLine("C:\\Users\\Raghav> " + fullCommand);
-                
-                if (fullCommand !== '') {
-                    history.push(fullCommand);
-                    historyIndex = history.length;
-                }
+    async function handleMessageSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('term-name')?.value.trim();
+      const email = document.getElementById('term-email')?.value.trim();
+      const phone = document.getElementById('term-phone')?.value.trim() || 'Not Provided';
+      const message = document.getElementById('term-message')?.value.trim();
 
-                if (cmd === '') {
-                    // Do nothing
-                } else if (commands[cmd]) {
-                    commands[cmd]();
-                } else {
-                    printLine(`'${fullCommand}' is not recognized as an internal or external command, operable program or batch file.`);
-                }
-                
-                input.value = '';
-                terminal.scrollTop = terminal.scrollHeight;
-            } else if (e.key === 'ArrowUp') {
-                if (historyIndex > 0) {
-                    historyIndex--;
-                    input.value = history[historyIndex];
-                }
-                e.preventDefault();
-            } else if (e.key === 'ArrowDown') {
-                if (historyIndex < history.length - 1) {
-                    historyIndex++;
-                    input.value = history[historyIndex];
-                } else {
-                    historyIndex = history.length;
-                    input.value = '';
-                }
-                e.preventDefault();
-            }
+      if (!name || !email || !message) return;
+
+      const formEl = document.getElementById('term-contact-form');
+      const sendingEl = document.getElementById('term-sending-state');
+      const successEl = document.getElementById('term-success-state');
+      const errorEl = document.getElementById('term-error-state');
+
+      formEl?.classList.add('hidden');
+      sendingEl?.classList.remove('hidden');
+      errorEl?.classList.add('hidden');
+
+      // Obfuscated email endpoint: raghavpatel1413@gmail.com
+      const target = atob('cmFnaGF2cGF0ZWwxNDEzQGdtYWlsLmNvbQ==');
+
+      try {
+        const response = await fetch(`https://formsubmit.co/ajax/${target}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone,
+            message: message,
+            _subject: `⚡ Terminal Secure Transmission from ${name} (raghav.dev)`,
+            _captcha: 'false'
+          })
         });
 
-        // Initial help message
-        printLine("Type 'HELP' to see available commands.");
-    </script>
+        sendingEl?.classList.add('hidden');
+
+        if (response.ok) {
+          successEl?.classList.remove('hidden');
+        } else {
+          const errData = await response.json().catch(() => ({}));
+          const errMsg = document.getElementById('term-error-msg');
+          if (errMsg && errData.message) errMsg.innerText = errData.message;
+          errorEl?.classList.remove('hidden');
+          formEl?.classList.remove('hidden');
+        }
+      } catch (err) {
+        sendingEl?.classList.add('hidden');
+        errorEl?.classList.remove('hidden');
+        formEl?.classList.remove('hidden');
+      }
+
+      lucide.createIcons();
+    }
+  </script>
 </body>
 </html>
