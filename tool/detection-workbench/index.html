@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Detection Engineering Workbench | Raghav Patel</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #071019;
+      --panel: #0d1a27;
+      --panel-2: #122333;
+      --line: #1e3a4d;
+      --text: #e8f2f7;
+      --muted: #8da8b6;
+      --accent: #51d7c4;
+      --blue: #62b7ff;
+      --warn: #f4c96b;
+      --danger: #ff8e91;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: radial-gradient(circle at 10% 0%, #113447 0, transparent 38rem), var(--bg); color: var(--text); }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .shell { max-width: 1440px; margin: 0 auto; padding: 28px 22px 54px; }
+    header { display: flex; gap: 22px; align-items: flex-end; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 24px; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(1.8rem, 4vw, 3.4rem); letter-spacing: -.04em; }
+    h2 { font-size: 1.05rem; }
+    h3 { font-size: .92rem; }
+    .eyebrow { color: var(--accent); font: 700 .72rem/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 9px; }
+    .lede { color: var(--muted); max-width: 720px; margin-top: 10px; line-height: 1.6; }
+    .header-meta { color: var(--muted); font-size: .8rem; text-align: right; line-height: 1.6; }
+    .layout { display: grid; grid-template-columns: minmax(240px, .8fr) minmax(360px, 1.2fr); gap: 18px; margin-top: 20px; }
+    .panel { background: linear-gradient(145deg, rgba(18,35,51,.96), rgba(10,23,35,.96)); border: 1px solid var(--line); border-radius: 16px; padding: 18px; box-shadow: 0 18px 50px #0000001c; }
+    .panel-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 15px; }
+    .panel-title small, .muted { color: var(--muted); font-size: .78rem; }
+    .search { width: 100%; border: 1px solid var(--line); background: #07131f; color: var(--text); border-radius: 10px; padding: 11px 12px; outline: 0; }
+    .search:focus, textarea:focus, input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px #51d7c41c; }
+    .filters { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0; }
+    .filter, .btn { border: 1px solid var(--line); background: #102636; color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: .78rem; }
+    .filter.active, .btn.primary { border-color: #51d7c466; background: #51d7c41a; color: var(--accent); }
+    .btn:hover, .filter:hover { border-color: var(--accent); }
+    .technique-list { display: grid; gap: 8px; max-height: 580px; overflow: auto; padding-right: 3px; }
+    .technique { width: 100%; text-align: left; border: 1px solid var(--line); border-radius: 10px; padding: 11px; background: #091724; color: var(--text); }
+    .technique.selected { border-color: var(--accent); background: #12302f; }
+    .technique strong { display: block; font-size: .84rem; }
+    .technique span { display: block; color: var(--muted); font: .7rem ui-monospace, monospace; margin-top: 4px; }
+    .technique em { display: inline-block; color: var(--blue); font-style: normal; font-size: .7rem; margin-top: 7px; }
+    .detail { min-height: 710px; }
+    .detail-top { border-bottom: 1px solid var(--line); padding-bottom: 15px; margin-bottom: 18px; }
+    .detail-id { color: var(--blue); font: .76rem ui-monospace, monospace; }
+    .detail h2 { font-size: 1.5rem; margin: 7px 0; }
+    .detail p, .detail li { color: #b5cbd4; line-height: 1.6; font-size: .86rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+    .chip { color: var(--accent); background: #51d7c412; border: 1px solid #51d7c433; border-radius: 999px; padding: 4px 8px; font-size: .7rem; }
+    .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .detail-block { border-top: 1px solid var(--line); padding-top: 13px; }
+    .detail-block h3 { color: var(--text); margin-bottom: 8px; }
+    .detail-block ul { padding-left: 18px; margin: 0; }
+    .builder { grid-column: 1 / -1; }
+    .builder-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    label { display: block; color: var(--muted); font-size: .75rem; margin-bottom: 6px; }
+    input, textarea, select { width: 100%; border: 1px solid var(--line); background: #07131f; color: var(--text); border-radius: 9px; padding: 10px; outline: 0; }
+    textarea { min-height: 106px; resize: vertical; line-height: 1.5; }
+    .full { grid-column: 1 / -1; }
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 15px; }
+    .status { color: var(--muted); font-size: .76rem; margin-left: auto; }
+    .outputs { margin-top: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .output { min-height: 230px; background: #06111b; border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+    .output h3 { color: var(--accent); margin-bottom: 8px; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; color: #b9d2dc; font: .72rem/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; margin: 0; }
+    .empty { color: var(--muted); padding: 24px 4px; font-size: .85rem; line-height: 1.6; }
+    footer { color: var(--muted); font-size: .72rem; margin-top: 18px; line-height: 1.6; }
+    @media (max-width: 900px) { .layout, .builder-grid { grid-template-columns: 1fr; } .builder { grid-column: auto; } .outputs, .detail-grid { grid-template-columns: 1fr; } header { align-items: flex-start; flex-direction: column; } .header-meta { text-align: left; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <div class="eyebrow">Raghav Patel · Defensive Security Tool</div>
+        <h1>Detection Engineering Workbench</h1>
+        <p class="lede">Map observed behavior to MITRE ATT&amp;CK, write a detection hypothesis, and export a practical Sigma draft — entirely in your browser.</p>
+      </div>
+      <div class="header-meta">ATT&amp;CK Enterprise quick reference<br>Curated browser-only edition · v1.0</div>
+    </header>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-title"><h2>Technique explorer</h2><small id="resultCount"></small></div>
+        <input id="search" class="search" type="search" placeholder="Search technique, ID, tactic or telemetry..." aria-label="Search techniques">
+        <div class="filters" id="filters"></div>
+        <div id="techniqueList" class="technique-list"></div>
+      </section>
+
+      <section id="detail" class="panel detail"></section>
+
+      <section class="panel builder">
+        <div class="panel-title">
+          <div><h2>Detection hypothesis builder</h2><small>Build a reviewable detection record from the selected technique.</small></div>
+          <button id="clear" class="btn" type="button">Clear</button>
+        </div>
+        <div class="builder-grid">
+          <div><label for="title">Detection name</label><input id="title" placeholder="Suspicious PowerShell download"></div>
+          <div><label for="status">Coverage status</label><select id="status"><option>Planned</option><option>In development</option><option>Tested</option><option>Production</option></select></div>
+          <div><div><label for="hypothesis">Detection hypothesis</label><textarea id="hypothesis" placeholder="What behavior should this detect, and why is it suspicious?"></textarea></div></div>
+          <div><div><label for="telemetry">Required telemetry</label><textarea id="telemetry" placeholder="Example: Sysmon Event ID 1, PowerShell 4104, process command line"></textarea></div></div>
+          <div><div><label for="logic">Detection logic / query</label><textarea id="logic" placeholder="Write the conditions an analyst should implement in their SIEM or EDR."></textarea></div></div>
+          <div><div><label for="falsePositives">False positives and tuning</label><textarea id="falsePositives" placeholder="Known benign administration, software deployment, exclusions and tuning ideas."></textarea></div></div>
+          <div class="full"><div><label for="response">Investigation and response steps</label><textarea id="response" placeholder="List evidence to collect, scoping questions and containment actions."></textarea></div></div>
+        </div>
+        <div class="actions">
+          <button id="generate" class="btn primary" type="button">Generate outputs</button>
+          <button id="save" class="btn" type="button">Save locally</button>
+          <button id="exportJson" class="btn" type="button">Export JSON</button>
+          <button id="exportMd" class="btn" type="button">Export Markdown</button>
+          <span id="statusText" class="status">No draft generated</span>
+        </div>
+        <div class="outputs">
+          <div class="output"><h3>Sigma YAML draft</h3><pre id="sigma">Generate a draft after selecting a technique.</pre></div>
+          <div class="output"><h3>Investigation checklist</h3><pre id="checklist">Your checklist will appear here.</pre></div>
+          <div class="output"><h3>Coverage record</h3><pre id="coverage">Your coverage record will appear here.</pre></div>
+        </div>
+      </section>
+    </div>
+    <footer>Technique summaries are a compact reference, not a substitute for the current MITRE ATT&amp;CK knowledge base. Validate telemetry, query syntax, false positives and response actions in your environment before production use. No data leaves this browser.</footer>
+  </main>
+
+  <script>
+    const techniques = [
+      { id: "T1059.001", name: "PowerShell", tactic: "Execution", tags: ["Windows", "Scripting", "Process"], description: "Adversaries may abuse PowerShell commands and scripts to execute code, download payloads, discover systems or perform post-compromise actions.", telemetry: ["Process creation with command line", "PowerShell 4103/4104", "AMSI or script block logging"], signals: ["EncodedCommand or suspicious DownloadString/DownloadFile usage", "Hidden window or bypassed execution policy", "Office, browser or service spawning PowerShell"], fp: "Signed administration scripts, software deployment and endpoint management tools." },
+      { id: "T1053.005", name: "Scheduled Task/Job: Scheduled Task", tactic: "Persistence", tags: ["Windows", "Persistence", "Task Scheduler"], description: "Adversaries may create or modify scheduled tasks to establish persistence, execute code at a chosen time or run with elevated privileges.", telemetry: ["Security 4698/4699/4702", "Task Scheduler Operational log", "Process creation and registry telemetry"], signals: ["New task from a user or parent process that rarely creates tasks", "Task action points to user-writable or temporary paths", "Trigger and run-as account are unusual for the host"], fp: "Legitimate patching, backup, monitoring and enterprise software installers." },
+      { id: "T1027", name: "Obfuscated/Compressed Files and Information", tactic: "Defense Evasion", tags: ["Obfuscation", "Payload", "Scripting"], description: "Adversaries may obfuscate or compress files and information to make malicious content harder to discover or analyze.", telemetry: ["Script block or command-line content", "File creation and archive events", "EDR content inspection"], signals: ["High-entropy script or command line", "Base64 or layered encoding near execution", "Archive or decompression utility used by an unusual parent"], fp: "Build pipelines, installers, compressed backups and administrative automation." },
+      { id: "T1105", name: "Ingress Tool Transfer", tactic: "Command and Control", tags: ["Network", "Download", "Payload"], description: "Adversaries may transfer tools or other files into a compromised environment using web, network or remote access protocols.", telemetry: ["Proxy and DNS logs", "Network connection events", "File creation and process lineage"], signals: ["Endpoint downloading an executable or script from a rare domain", "Download followed by execution within a short interval", "User agent or destination inconsistent with the process"], fp: "Approved software distribution, browser downloads and developer workflows." },
+      { id: "T1082", name: "System Information Discovery", tactic: "Discovery", tags: ["Discovery", "Host", "Inventory"], description: "Adversaries may enumerate operating system and host information to understand the environment and choose follow-on actions.", telemetry: ["Process creation", "EDR command telemetry", "PowerShell or shell history where available"], signals: ["Burst of discovery commands from a new process tree", "Discovery commands following initial access or suspicious download", "Rare account or service performing broad host enumeration"], fp: "Asset inventory, vulnerability scanners, monitoring and help-desk diagnostics." },
+      { id: "T1047", name: "Windows Management Instrumentation", tactic: "Execution", tags: ["Windows", "Remote", "WMI"], description: "Adversaries may abuse WMI to execute commands, make changes or move laterally through Windows systems.", telemetry: ["WMI-Activity Operational log", "Process creation and parent-child lineage", "Remote logon and network telemetry"], signals: ["WMI provider host tied to unusual command execution", "Remote WMI from a workstation or uncommon account", "WMI spawning script interpreters or encoded content"], fp: "Configuration management, monitoring agents, IT administration and inventory." },
+      { id: "T1547.001", name: "Registry Run Keys / Startup Folder", tactic: "Boot or Logon Autostart Execution", tags: ["Windows", "Persistence", "Registry"], description: "Adversaries may use Registry Run Keys or Startup Folders to execute programs automatically when a user logs on.", telemetry: ["Registry modification events", "Process creation", "Autoruns or endpoint persistence telemetry"], signals: ["Run key points to user-writable, temporary or unsigned content", "New persistence created by an unusual process", "Persistence followed by outbound network activity"], fp: "Approved login agents, enterprise utilities and software updaters." },
+      { id: "T1562.001", name: "Impair Defenses: Disable or Modify Tools", tactic: "Defense Evasion", tags: ["Defense Evasion", "EDR", "Logging"], description: "Adversaries may disable or modify security tools, logging or defensive controls to avoid detection or reduce response capability.", telemetry: ["Service and configuration changes", "Security product audit logs", "PowerShell, registry and process telemetry"], signals: ["Security service stopped or exclusion added outside change window", "Logging configuration changed by an unusual identity", "Defense modification followed by suspicious execution"], fp: "Approved maintenance, policy rollout and incident-response containment actions." },
+      { id: "T1071.001", name: "Web Protocols: Web Protocols", tactic: "Command and Control", tags: ["Network", "HTTP", "HTTPS"], description: "Adversaries may use web protocols to communicate with compromised systems and blend command and control into normal traffic.", telemetry: ["Proxy, DNS and TLS metadata", "Network connection events", "Endpoint process-to-connection mapping"], signals: ["Periodic beacon-like requests to a rare destination", "Process makes web connections outside its normal role", "Unusual URI, user agent, certificate or response pattern"], fp: "Browsers, update services, cloud agents and sanctioned APIs." },
+      { id: "T1566.001", name: "Phishing: Spearphishing Attachment", tactic: "Initial Access", tags: ["Email", "Initial Access", "Attachment"], description: "Adversaries may send malicious files or links through targeted email to gain execution or access.", telemetry: ["Mail gateway and message trace", "Attachment sandbox results", "Office, PDF reader and script process lineage"], signals: ["Attachment type or sender anomalies", "Office spawning a script interpreter or shell", "User interaction followed by download or credential prompt"], fp: "Business documents, macros in legacy workflows and external partner mail." },
+      { id: "T1486", name: "Data Encrypted for Impact", tactic: "Impact", tags: ["Ransomware", "Impact", "Files"], description: "Adversaries may encrypt data on target systems or network shares to interrupt availability and create pressure.", telemetry: ["File rename and write bursts", "Backup and shadow copy events", "Network share access and process telemetry"], signals: ["Rapid high-volume file modifications with unusual extension changes", "Shadow copy or backup deletion before file activity", "One process touching many user and shared files"], fp: "Bulk file conversion, backup jobs, migrations and approved encryption tooling." }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    let selected = techniques[0];
+    let draft = {};
+    const tactics = ["All", ...new Set(techniques.map((item) => item.tactic))];
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
+    }
+    function renderFilters() {
+      $("filters").innerHTML = tactics.map((tactic, index) => `<button class="filter${index === 0 ? " active" : ""}" data-tactic="${escapeHtml(tactic)}" type="button">${escapeHtml(tactic)}</button>`).join("");
+      $("filters").addEventListener("click", (event) => {
+        const button = event.target.closest(".filter");
+        if (!button) return;
+        document.querySelectorAll(".filter").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        renderList();
+      });
+    }
+    function getFiltered() {
+      const query = $("search").value.trim().toLowerCase();
+      const tactic = document.querySelector(".filter.active")?.dataset.tactic || "All";
+      return techniques.filter((item) => (tactic === "All" || item.tactic === tactic) && (!query || JSON.stringify(item).toLowerCase().includes(query)));
+    }
+    function renderList() {
+      const items = getFiltered();
+      $("resultCount").textContent = `${items.length} of ${techniques.length}`;
+      $("techniqueList").innerHTML = items.length ? items.map((item) => `<button class="technique${item.id === selected.id ? " selected" : ""}" data-id="${item.id}" type="button"><strong>${escapeHtml(item.name)}</strong><span>${item.id} · ${escapeHtml(item.tactic)}</span><em>${item.tags.slice(0, 3).map(escapeHtml).join(" · ")}</em></button>`).join("") : `<div class="empty">No techniques match this search.</div>`;
+    }
+    function renderDetail() {
+      $("detail").innerHTML = `<div class="detail-top"><div class="detail-id">${selected.id} · ${escapeHtml(selected.tactic)}</div><h2>${escapeHtml(selected.name)}</h2><p>${escapeHtml(selected.description)}</p><div class="chips">${selected.tags.map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join("")}</div></div><div class="detail-grid"><div class="detail-block"><h3>Useful telemetry</h3><ul>${selected.telemetry.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div><div class="detail-block"><h3>Detection signals</h3><ul>${selected.signals.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div><div class="detail-block"><h3>False-positive themes</h3><p>${escapeHtml(selected.fp)}</p></div><div class="detail-block"><h3>Analyst cue</h3><p>Start with the process, identity, host, timestamp and parent-child relationship. Confirm the activity against change records before escalating.</p></div></div>`;
+    }
+    function loadSelection() {
+      $("title").value = `${selected.name} detection`;
+      $("hypothesis").value = `Detect ${selected.name.toLowerCase()} activity that is unusual for the user, host, parent process or time window.`;
+      $("telemetry").value = selected.telemetry.join("\n");
+      $("falsePositives").value = selected.fp;
+      $("response").value = "Validate the initiating identity and host; reconstruct the process tree; review related network and file activity; scope across the environment; preserve evidence; then contain only after confirming malicious intent.";
+    }
+    function currentDraft() {
+      return { technique: selected, name: $("title").value.trim(), status: $("status").value, hypothesis: $("hypothesis").value.trim(), telemetry: $("telemetry").value.trim(), logic: $("logic").value.trim(), falsePositives: $("falsePositives").value.trim(), response: $("response").value.trim(), generatedAt: new Date().toISOString() };
+    }
+    function generate() {
+      draft = currentDraft();
+      const title = draft.name || `${selected.name} detection`;
+      const conditions = draft.logic || `selection:\n  EventID: [1]\ncondition: selection`;
+      $("sigma").textContent = `title: ${title}\nid: ${crypto.randomUUID ? crypto.randomUUID() : "local-detection-id"}\nstatus: ${draft.status.toLowerCase()}\ndescription: ${draft.hypothesis || selected.description}\nreferences:\n  - https://attack.mitre.org/techniques/${selected.id.replace(".", "/")}/\ntags:\n  - attack.${selected.tactic.toLowerCase().replaceAll(" ", "-")}\n  - attack.${selected.id.toLowerCase().replace(".", "")}\nlogsource:\n  product: windows\n  category: process_creation\n${conditions}\nfalsepositives:\n  - ${draft.falsePositives || selected.fp}\nlevel: medium`;
+      $("checklist").textContent = `1. Identify the account, host and initiating process.\n2. Reconstruct the complete process and command-line tree.\n3. Confirm parent, child, signer, hash and file path.\n4. Review DNS, proxy, endpoint and authentication activity.\n5. Search for the same indicator or behavior across the environment.\n6. Compare against change records and known administration.\n7. Preserve evidence and document the decision.\n\nResponse notes:\n${draft.response || "Add investigation and containment steps."}`;
+      $("coverage").textContent = `Technique: ${selected.id} — ${selected.name}\nTactic: ${selected.tactic}\nStatus: ${draft.status}\nTelemetry:\n${draft.telemetry || selected.telemetry.join("\n")}\n\nLast generated: ${new Date().toLocaleString()}`;
+      $("statusText").textContent = `Generated for ${selected.id}`;
+    }
+    function download(name, content, type) {
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(new Blob([content], { type }));
+      link.download = name;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+    function markdown() {
+      return `# ${draft.name || selected.name}\n\n- **ATT&CK:** ${selected.id} — ${selected.name}\n- **Tactic:** ${selected.tactic}\n- **Status:** ${draft.status}\n\n## Hypothesis\n${draft.hypothesis}\n\n## Telemetry\n${draft.telemetry}\n\n## Logic\n${draft.logic}\n\n## False positives and tuning\n${draft.falsePositives}\n\n## Investigation and response\n${draft.response}\n`;
+    }
+    $("search").addEventListener("input", renderList);
+    $("techniqueList").addEventListener("click", (event) => {
+      const button = event.target.closest(".technique");
+      if (!button) return;
+      selected = techniques.find((item) => item.id === button.dataset.id) || selected;
+      renderList(); renderDetail(); loadSelection();
+    });
+    $("generate").addEventListener("click", generate);
+    $("save").addEventListener("click", () => { localStorage.setItem("detection-workbench-draft", JSON.stringify(currentDraft())); $("statusText").textContent = "Draft saved in this browser"; });
+    $("clear").addEventListener("click", () => { ["title", "hypothesis", "telemetry", "logic", "falsePositives", "response"].forEach((id) => { $(id).value = ""; }); $("statusText").textContent = "Draft cleared"; });
+    $("exportJson").addEventListener("click", () => download("detection-workbench.json", JSON.stringify(currentDraft(), null, 2), "application/json"));
+    $("exportMd").addEventListener("click", () => download("detection-workbench.md", markdown(), "text/markdown"));
+    renderFilters(); renderList(); renderDetail(); loadSelection();
+    try {
+      const saved = JSON.parse(localStorage.getItem("detection-workbench-draft") || "null");
+      if (saved?.technique?.id) {
+        selected = techniques.find((item) => item.id === saved.technique.id) || selected;
+        renderList(); renderDetail();
+        ["name", "status", "hypothesis", "telemetry", "logic", "falsePositives", "response"].forEach((key) => { if (saved[key] !== undefined) $(key === "name" ? "title" : key).value = saved[key]; });
+        $("statusText").textContent = "Saved draft restored";
+      }
+    } catch (error) { $("statusText").textContent = "Local draft unavailable"; }
+  </script>
+</body>
+</html>
